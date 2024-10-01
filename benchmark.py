@@ -3,7 +3,7 @@ import timeit
 from src.cfor import c4
 
 
-elements = 10000000
+elements = 100000
 # Numeric data to operate on
 numeric_data = [1.0, 2.0, 3.0, 4.0, 5.0] * elements
 threshold_numeric = 3.0
@@ -109,7 +109,7 @@ print(f"----------Numeric Benchmarks on {elements} elements---------")
 print(f"Python loop (numeric) time: {python_loop_numeric_time:.4f} seconds")
 print(f"C extension with MP and SIMD (numeric) time: {c4_numeric_mp_time:.4f} seconds, Speedup: {numeric_mp_speedup:.2f}x")
 print(f"C extension with MP no SIMD (numeric) time: {c4_numeric_mp_no_simd_time:.4f} seconds, Speedup: {numeric_mp_no_simd_speedup:.2f}x")
-print(f"C extension without MP (numeric) time: {c4_numeric_no_mp_time:.4f} seconds, Speedup: {numeric_no_mp_speedup:.2f}x")
+print(f"C extension without MP and with SIMD (numeric) time: {c4_numeric_no_mp_time:.4f} seconds, Speedup: {numeric_no_mp_speedup:.2f}x")
 print(f"Pandas apply with lambda (numeric) time: {pandas_apply_numeric_time:.4f} seconds, Speedup: {pandas_numeric_speedup:.2f}x")
 
 # Output the results for string comparisons
