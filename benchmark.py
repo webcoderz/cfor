@@ -49,18 +49,21 @@ def pandas_apply_lambda_string(df, threshold):
 
 # Time the C extension with numeric data and multi-processing (MP enabled)
 def benchmark_c4_numeric_mp():
-    return c4(numeric_data, threshold_numeric, condition="greater_than", use_mp=True)
+    return c4(numeric_data, threshold_numeric, condition=">", use_mp=True)
 
 # Time the C extension with string data and multi-processing (MP enabled)
 def benchmark_c4_string_mp():
-    return c4(string_data, threshold_string, condition="equal_to", use_mp=True)
+    return c4(string_data, threshold_string, condition="==", use_mp=True)
+
+def benchmark_c4_numeric_mp_no_simd():
+    return c4(numeric_data, threshold_numeric, condition=">", use_mp=True, use_simd=False)
 
 def benchmark_c4_numeric_no_mp():
-    return c4(numeric_data, threshold_numeric, condition="greater_than", use_mp=False)
+    return c4(numeric_data, threshold_numeric, condition=">", use_mp=False)
 
 # Time the C extension with string data and multi-processing (MP enabled)
 def benchmark_c4_string_no_mp():
-    return c4(string_data, threshold_string, condition="equal_to", use_mp=False)
+    return c4(string_data, threshold_string, condition="==", use_mp=False)
 
 # Time the regular Python loop for numeric data
 def benchmark_python_loop_numeric():
@@ -83,6 +86,7 @@ def benchmark_pandas_apply_string():
 python_loop_numeric_time = timeit.timeit(benchmark_python_loop_numeric, number=10)
 python_loop_string_time = timeit.timeit(benchmark_python_loop_string, number=10)
 c4_numeric_mp_time = timeit.timeit(benchmark_c4_numeric_mp, number=10)
+c4_numeric_mp_no_simd_time = timeit.timeit(benchmark_c4_numeric_mp_no_simd, number=10)
 c4_string_mp_time = timeit.timeit(benchmark_c4_string_mp, number=10)
 pandas_apply_numeric_time = timeit.timeit(benchmark_pandas_apply_numeric, number=10)
 pandas_apply_string_time = timeit.timeit(benchmark_pandas_apply_string, number=10)
@@ -91,6 +95,7 @@ c4_string_no_mp_time = timeit.timeit(benchmark_c4_string_no_mp, number=10)
 
 # Calculate speedups for numeric data
 numeric_mp_speedup = python_loop_numeric_time / c4_numeric_mp_time
+numeric_mp_no_simd_speedup = python_loop_numeric_time / c4_numeric_mp_no_simd_time
 numeric_no_mp_speedup = python_loop_numeric_time / c4_numeric_no_mp_time
 pandas_numeric_speedup = python_loop_numeric_time / pandas_apply_numeric_time
 
@@ -103,6 +108,7 @@ pandas_string_speedup = python_loop_string_time / pandas_apply_string_time
 print(f"----------Numeric Benchmarks on {elements} elements---------")
 print(f"Python loop (numeric) time: {python_loop_numeric_time:.4f} seconds")
 print(f"C extension with MP (numeric) time: {c4_numeric_mp_time:.4f} seconds, Speedup: {numeric_mp_speedup:.2f}x")
+print(f"C extension with MP no SIMD (numeric) time: {c4_numeric_mp_no_simd_time:.4f} seconds, Speedup: {numeric_mp_no_simd_speedup:.2f}x")
 print(f"C extension without MP (numeric) time: {c4_numeric_no_mp_time:.4f} seconds, Speedup: {numeric_no_mp_speedup:.2f}x")
 print(f"Pandas apply with lambda (numeric) time: {pandas_apply_numeric_time:.4f} seconds, Speedup: {pandas_numeric_speedup:.2f}x")
 

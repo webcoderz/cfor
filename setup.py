@@ -3,8 +3,8 @@ from setuptools import setup, Extension
 module = Extension(
     'cfor',  # The name of the extension
     sources=['src/c/loopmodule.c'],  # The source file
-    extra_compile_args=['-fopenmp'],  # Enable OpenMP support for parallel processing
-    extra_link_args=['-fopenmp'],
+    extra_compile_args=["-O3", "-mavx2", "-msse2", "-fopenmp"],  # Enable AVX2, SSE2, and OpenMP
+    extra_link_args=["-fopenmp"],  # Link with OpenMP
 )
 
 setup(
